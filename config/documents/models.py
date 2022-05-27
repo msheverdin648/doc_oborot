@@ -4,8 +4,8 @@ from accounts.models import CustomUser
 
 
 class DocumentModel(models.Model):
-    number = models.IntegerField('Номер договора')
-    name = models.CharField('Название договора', max_length=255)
+    number = models.IntegerField('Номер договора', null=True)
+    name = models.CharField('Название договора', max_length=255, null=True)
     type = models.CharField('Тип документа', max_length=255, null=True)
     author = models.CharField('Автор документа', max_length=255, null=True)
     doc_from = models.CharField('Отдел откуда документ', max_length=255, null=True)
