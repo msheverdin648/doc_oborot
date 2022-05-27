@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags static %}
+
+{% block body %}
+{% if user.is_authenticated and user.user_group == 'director' %}
+   <div class="container">
+        <h2 style="text-align: center;" >Регистрация</h2>
+        <form action="" method="post" class="">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+        </form>
+   </div>
+{% else %}
+    <h1> Извините, вы не авторизованны или недостаточно прав.</h1>
+{% endif %}
+    <style>
+        input, select{
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock body %}

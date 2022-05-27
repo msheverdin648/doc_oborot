@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Документооборот Стефашин Лев Николаевич</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+<!--    <script src="{% static 'js/bootstrap.min.js' %}" ></script>-->
+</head>
+    <body class="" style="height: 100%">
+        <div class="wrapper d-flex flex-column " style="height: 100%">
+            <header class="header" style="background-color: #e3f2fd;">
+                <div class="container">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                      <div class="container-fluid">
+                        <a class="navbar-brand" >Документооборот</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                          <ul class="navbar-nav">
+                              {% url 'home' as home_url %}
+                            <li class="nav-item {% if home_url == request.path  %}active{% endif %}">
+
+                              <a class="nav-link" aria-current="page" href="{% url 'home' %}">Главная</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                              {% url 'documents' as documents_url %}
+                                <li class="nav-item {% if documents_url == request.path  %}active{% endif %}">
+                                  <a class="nav-link" href="{% url 'documents' %}">Документы</a>
+                                </li>
+                            {% endif %}
+                          {% url 'description' as description_url %}
+                            <li class="nav-item {% if description_url == request.path  %}active{% endif %}">
+                              <a class="nav-link" href="{% url 'description' %}">Справка</a>
+                            </li>
+                              {% if user.is_authenticated %}
+                              {% url 'signup' as signup_url %}
+                                <li class="nav-item {% if signup_url == request.path  %}active{% endif %}">
+                                  <a class="nav-link" href="{% url 'signup' %}">Регистрация нового пользователя</a>
+                                </li>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                  <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                                </li>
+                            {% else %}
+                              {% url 'login' as login_url %}
+                                <li class="nav-item {% if login_url == request.path  %}active{% endif %}">
+                                  <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                                </li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
+                </div>
+            </header>
+            <main class="main d-flex" style="flex: 1 1 100%; justify-content: center; padding: 50px 0;"  >
+                {% block body %}
+                {% endblock body %}
+            </main>
+            <footer class="footer d-flex " style="background-color: #e3f2fd; min-height: 50px; margin-top: 20px; padding: 35px 0;">
+                <p class="my-0 mx-auto">
+                    &copy;Copyright, Стефашин Лев Николаевич, 2022.
+                </p>
+            </footer>
+        </div>
+    </body>
+</html>

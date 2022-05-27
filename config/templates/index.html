@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+   <div class="container">
+        <h1>Здравствуйте {{ request.user.first_name }} {{ request.user.last_name }}</h1>
+       <br><br>
+       <h3>Для начала работы перейдите по <a href="{% url 'documents' %}">ссылке</a> или сверху нажмите "Документы".</h3>
+       <h3>Если вы не знакомы с данным приложением, то перейдите на страницу <a href="{% url 'description' %}">справка</a>.</h3>
+   </div>
+{% endblock body %}

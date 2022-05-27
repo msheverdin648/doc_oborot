@@ -1,0 +1,5 @@
+venv
+config/db.sqlite3
+local_settings.py
+prod_settings.py
+settings2.py
