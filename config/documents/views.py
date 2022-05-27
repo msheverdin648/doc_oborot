@@ -42,11 +42,11 @@ class DocumetnsAdd(View):
             document.name = form.cleaned_data['name']
             document.number = form.cleaned_data['number']
             document.user = request.user
-            document.type = request.user
-            document.author = request.user
-            document.doc_from = request.user
-            document.description = request.user
-            document.theme = request.user
+            document.type = form.cleaned_data['type']
+            document.author = form.cleaned_data['author']
+            document.doc_from = form.cleaned_data['doc_from']
+            document.description = form.cleaned_data['description']
+            document.theme = form.cleaned_data['theme']
             document.save()
             return redirect('documents')
 
@@ -73,11 +73,11 @@ class DocumentsChange(View):
             document.name = form.cleaned_data['name']
             document.number = form.cleaned_data['number']
             document.user = request.user
-            document.type = request.user
-            document.author = request.user
-            document.doc_from = request.user
-            document.description = request.user
-            document.theme = request.user
+            document.type = form.cleaned_data['type']
+            document.author = form.cleaned_data['author']
+            document.doc_from = form.cleaned_data['doc_from']
+            document.description = form.cleaned_data['description']
+            document.theme = form.cleaned_data['theme']
             document.file = request.FILES['file']
             document.save()
             return redirect('documents')
