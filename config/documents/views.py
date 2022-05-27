@@ -19,7 +19,19 @@ class DocumentsView(View):
         }
         return render(request, 'documents/index.html', context)
 
-
+'''
+                number = models.IntegerField('Номер договора')
+                name = models.CharField('Название договора', max_length=255)
+                type = models.CharField('Тип документа', max_length=255, null=True)
+                author = models.CharField('Автор документа', max_length=255, null=True)
+                doc_from = models.CharField('Отдел откуда документ', max_length=255, null=True)
+                description = models.TextField('Краткое описание документа', null=True)
+                theme = models.CharField('Тема документа', max_length=255, null=True)
+                user = models.ForeignKey(CustomUser, verbose_name='Кто добавил', on_delete=models.CASCADE, null=True)
+                load_date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
+                change_date = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
+                file = models.FileField(verbose_name='Электронный файл договора', upload_to='documents/')
+            '''
 class DocumetnsAdd(View):
 
     def post(self, request):
@@ -30,6 +42,11 @@ class DocumetnsAdd(View):
             document.name = form.cleaned_data['name']
             document.number = form.cleaned_data['number']
             document.user = request.user
+            document.type = request.user
+            document.author = request.user
+            document.doc_from = request.user
+            document.description = request.user
+            document.theme = request.user
             document.save()
             return redirect('documents')
 
@@ -56,6 +73,11 @@ class DocumentsChange(View):
             document.name = form.cleaned_data['name']
             document.number = form.cleaned_data['number']
             document.user = request.user
+            document.type = request.user
+            document.author = request.user
+            document.doc_from = request.user
+            document.description = request.user
+            document.theme = request.user
             document.file = request.FILES['file']
             document.save()
             return redirect('documents')
@@ -151,19 +173,7 @@ class CreateReport(View):
             }
             return render(request, 'documents/index.html', context)
         else:
-            '''
-                number = models.IntegerField('Номер договора')
-                name = models.CharField('Название договора', max_length=255)
-                type = models.CharField('Тип документа', max_length=255, null=True)
-                author = models.CharField('Автор документа', max_length=255, null=True)
-                doc_from = models.CharField('Отдел откуда документ', max_length=255, null=True)
-                description = models.TextField('Краткое описание документа', null=True)
-                theme = models.CharField('Тема документа', max_length=255, null=True)
-                user = models.ForeignKey(CustomUser, verbose_name='Кто добавил', on_delete=models.CASCADE, null=True)
-                load_date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
-                change_date = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
-                file = models.FileField(verbose_name='Электронный файл договора', upload_to='documents/')
-            '''
+
             data = []  # Окончательный список данных, которые будут возвращены
             for row in documents:
                 source_data = [row.number, row.name, row.type, row.author, row.doc_from, row.theme,
