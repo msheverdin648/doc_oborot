@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -13,25 +14,13 @@ from .models import DocumentModel
 class DocumentsView(View):
 
     def get(self, request):
-        documents = DocumentModel.objects.all()
+        documents = DocumentModel.objects.exclude(~Q(user=request.user.pk), private=True)
         context = {
             'documents': documents,
         }
         return render(request, 'documents/index.html', context)
 
-'''
-                number = models.IntegerField('Номер договора')
-                name = models.CharField('Название договора', max_length=255)
-                type = models.CharField('Тип документа', max_length=255, null=True)
-                author = models.CharField('Автор документа', max_length=255, null=True)
-                doc_from = models.CharField('Отдел откуда документ', max_length=255, null=True)
-                description = models.TextField('Краткое описание документа', null=True)
-                theme = models.CharField('Тема документа', max_length=255, null=True)
-                user = models.ForeignKey(CustomUser, verbose_name='Кто добавил', on_delete=models.CASCADE, null=True)
-                load_date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
-                change_date = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
-                file = models.FileField(verbose_name='Электронный файл договора', upload_to='documents/')
-            '''
+
 class DocumetnsAdd(View):
 
     def post(self, request):

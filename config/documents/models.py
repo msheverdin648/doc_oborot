@@ -12,6 +12,8 @@ class DocumentModel(models.Model):
     description = models.TextField('Краткое описание документа', null=True)
     theme = models.CharField('Тема документа', max_length=255, null=True)
     user = models.ForeignKey(CustomUser, verbose_name='Кто добавил', on_delete=models.CASCADE, null=True)
+    private = models.BooleanField('Приватность (поставьте галочку, если больше никто не должен видеть этот докумени)'
+                                  , default=True)
     load_date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
     change_date = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
     file = models.FileField(verbose_name='Электронный файл договора', upload_to='documents/')
