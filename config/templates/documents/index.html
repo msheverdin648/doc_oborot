@@ -3,9 +3,45 @@
 
 {% block body %}
   <div class="container">
-    <h1 class="mb-5 " style="text-align: center;">Документы</h1>
-    <div class="d-flex justify-content-between align-items-center mb-5">
-       <a href="{% url 'add' %}" class="btn btn-primary ">Добавить документ</a>
+    {% if request.path == incoming_url  %}
+      <h1 class="mb-5 " style="text-align: center;">Входящие</h1>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+        <form class="search d-flex flex-row align-items-center" action="{% url 'sort' %}" method="get">
+            <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
+              <option disabled selected value="">
+                Поле для сортировки:
+              </option>
+              <option value="name">Название документа</option>
+              <option value="number">Номер документа</option>
+              <option value="load_date">Дата добавления</option>
+              <option value="change_date">Дата выполнения</option>
+            </select>
+            <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="up_down">
+              <option disabled selected value="">
+                Сортировать по:
+              </option>
+              <option value="up">Возрастанию</option>
+              <option value="down">Убыванию</option>
+            </select>
+            <button type="submit" class="btn btn-success ml-2">Сортировать</button>
+</form>
+        <form class="search d-flex flex-row align-items-center" action="{% url 'filter' %}" method="get">
+            <select required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
+              <option disabled selected value="">
+                Фильтр/Поиск по:
+              </option>
+              <option value="name">Названию документа</option>
+              <option value="user_fio">ФИО пользователя</option>
+              <option value="number">Номеру документа</option>
+            </select>
+            <input required name="q" style="height: 38px; border-radius: 5px; padding: 0 10px;">
+            <button type="submit" class="btn btn-success ml-2">Поиск</button>
+        </form>
+</div>
+    {% else %}
+            <h1 class="mb-5 " style="text-align: center;">Исходящие</h1>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+       <a href="{% url 'add' %}" class="btn btn-primary ">Создать</a>
         <form class="search d-flex flex-row align-items-center" action="{% url 'filter' %}" method="get">
             <select required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
               <option disabled selected value="">
@@ -19,7 +55,7 @@
             <button type="submit" class="btn btn-success ml-2">Поиск</button>
         </form>
     </div>
-    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
         <form class="search d-flex flex-row align-items-center" action="{% url 'report' %}" method="get">
             <label class="d-flex flex-column">
                 Выберите дату за которую нужно создать отчет
@@ -35,7 +71,7 @@
               <option value="name">Название документа</option>
               <option value="number">Номер документа</option>
               <option value="load_date">Дата добавления</option>
-              <option value="change_date">Дата изменения</option>
+              <option value="change_date">Дата выполнения</option>
             </select>
             <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="up_down">
               <option disabled selected value="">
@@ -47,6 +83,7 @@
             <button type="submit" class="btn btn-success ml-2">Сортировать</button>
         </form>
     </div>
+    {% endif %}
     {% if error_message %}
       <div class="d-flex justify-content-between align-items-center mb-5">
            <h3 style="color: red;">
@@ -65,7 +102,17 @@
                 Название документа
               </th>
               <th scope='col'>
-                Добавил
+                Цель документа
+              </th>
+              <th scope='col'>
+                Статус
+              </th>
+              <th scope='col'>
+                  {% if request.path == outcoming_url %}
+                        Кому
+                  {% else %}
+                        От кого
+                  {% endif %}
               </th>
               <th scope='col'>
                 Файл
@@ -74,7 +121,7 @@
                 Дата добавления
               </th>
               <th scope='col'>
-                Дата изменения
+                Срок выполнения
               </th>
               <th scope='col'>
               </th>
@@ -85,13 +132,54 @@
               <tr>
                 <th scope="row">{{ doc.number }}</th>
                 <td>{{ doc.name }}</td>
-                <td>{{ doc.user.first_name }} {{ doc.user.last_name }}</td>
+                <td>
+                    {% if doc.action == 'read' %}
+                        Ознакомление
+                    {% elif doc.action == 'submited' %}
+                        Подпись
+                    {% endif %}
+                </td>
+                <td>
+                    {% if doc.status == 'added' %}
+                        Создан
+                    {% elif doc.status == 'waiting' %}
+                        Ожидает подписи
+                    {% elif doc.status == 'terminated' %}
+                        Расторгнут
+                    {% elif doc.status == 'executed' %}
+                        Исполнен
+                    {% elif doc.status == 'read' %}
+                        Прочитан
+                    {% elif doc.status == 'submited' %}
+                        Подписан
+                    {% endif %}
+                </td>
+                  {% if request.path == outcoming_url %}
+                      <td>{{ doc.user_to.first_name }} {{ doc.user_to.last_name }}</td>
+                  {% else %}
+                      <td>{{ doc.user_from.first_name }} {{ doc.user_from.last_name }}</td>
+                  {% endif %}
                 <td><a href="{{ doc.file.url }}">файл</a> </td>
                 <td>{{ doc.load_date }}</td>
-                <td>{{ doc.change_date }}</td>
+                <td>{{ doc.ending_date }}</td>
                 <td>
-                  <a class="btn btn-warning" href="{% url 'change' doc.pk %}">Изменить</a>
-                  <a href="{% url 'delete' doc.pk  %}" class="btn btn-danger">Удалить</a>
+                    {% if request.path == outcoming_url %}
+                        <a class="btn btn-warning" href="{% url 'to_archive' doc.pk %}">В архив</a>
+                        <a href="{% url 'delete' doc.pk  %}" class="btn btn-danger">Удалить</a>
+                    {% else %}
+                        {% if doc.action == 'read' %}
+                            {% if doc.status != 'read' %}
+                                <a class="btn btn-success" href="{% url 'read' doc.pk %}">Отметить прочитанным</a>
+                            {% endif %}
+                        {% else %}
+                            {% if doc.status != 'submited' %}
+                                <a href="{% url 'submit' doc.pk  %}" class="btn btn-success">Подписать</a>
+                            {% endif %}
+                            {% if doc.status != 'terminated' and doc.status != 'submited' %}
+                                <a href="{% url 'terminate' doc.pk  %}" class="btn btn-danger">Отказать</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
                 </td>
               </tr>
             {% endfor %}

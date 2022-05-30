@@ -9,5 +9,6 @@
             {{ form|crispy }}
             <input type="submit" value="Войти" class="btn btn-primary mt-3 w-100">
         </form>
+       <p style="margin: 20px 0 0 0 " >Еще нет аккаунта? <a href="{% url 'signup' %}">Зарегестрироваться.</a></p>
    </div>
 {% endblock body %}

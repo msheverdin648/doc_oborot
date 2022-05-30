@@ -22,27 +22,28 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNav">
                           <ul class="navbar-nav">
-                              {% url 'home' as home_url %}
-                            <li class="nav-item {% if home_url == request.path  %}active{% endif %}">
-
-                              <a class="nav-link" aria-current="page" href="{% url 'home' %}">Главная</a>
-                            </li>
+                              {% url 'incoming' as incoming_url %}
+                              {% if user.is_authenticated %}
+                                  <li class="nav-item {% if incoming_url == request.path  %}active{% endif %}">
+                                      <a class="nav-link" aria-current="page" href="{% url 'incoming' %}">Входящие</a>
+                                  </li>
+                              {% endif %}
                             {% if user.is_authenticated %}
-                              {% url 'documents' as documents_url %}
-                                <li class="nav-item {% if documents_url == request.path  %}active{% endif %}">
-                                  <a class="nav-link" href="{% url 'documents' %}">Документы</a>
+                              {% url 'outcoming' as outcoming_url %}
+                                <li class="nav-item {% if outcoming_url == request.path  %}active{% endif %}">
+                                  <a class="nav-link" href="{% url 'outcoming' %}">Исходящие</a>
                                 </li>
                             {% endif %}
+                          {% if user.is_authenticated %}
+                          {% url 'archive' as archive_url %}
+                            <li class="nav-item {% if archive_url == request.path  %}active{% endif %}">
+                              <a class="nav-link" href="{% url 'archive' %}">Архив</a>
+                            </li>
+                        {% endif %}
                           {% url 'description' as description_url %}
                             <li class="nav-item {% if description_url == request.path  %}active{% endif %}">
                               <a class="nav-link" href="{% url 'description' %}">Справка</a>
                             </li>
-                              {% if user.is_authenticated %}
-                              {% url 'signup' as signup_url %}
-                                <li class="nav-item {% if signup_url == request.path  %}active{% endif %}">
-                                  <a class="nav-link" href="{% url 'signup' %}">Регистрация нового пользователя</a>
-                                </li>
-                            {% endif %}
                             {% if user.is_authenticated %}
                                 <li class="nav-item">
                                   <a class="nav-link" href="{% url 'logout' %}">Выйти</a>

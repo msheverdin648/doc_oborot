@@ -7,4 +7,4 @@ class DocumentForm(ModelForm):
     class Meta:
         model = DocumentModel
         fields = '__all__'
-        exclude = ('user', 'load_date')
+        exclude = ('user_from', 'submited', 'archived', 'status', 'load_date')
