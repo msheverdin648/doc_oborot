@@ -5,8 +5,8 @@
   <div class="container">
     <h1 class="mb-5 " style="text-align: center;">Архив</h1>
     <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
-        <form class="search d-flex flex-row align-items-center flex-wrap" action="{% url 'archive_sort' %}" method="get">
-            <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
+        <form class="search d-flex flex-row align-items-center flex-wrap" style="margin: 0 0 50px 0;" action="{% url 'archive_sort' %}" method="get">
+            <select value="" required style="height: 38px; background-color: transparent; margin: 0 10px 10px 0; boreder-radius: 5px;" name="choice">
               <option disabled selected value="">
                 Поле для сортировки:
               </option>
@@ -15,17 +15,17 @@
               <option value="load_date">Дата добавления</option>
               <option value="change_date">Дата выполнения</option>
             </select>
-            <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="up_down">
+            <select value="" required style="height: 38px; background-color: transparent; margin: 0 10px 10px 0; boreder-radius: 5px;" name="up_down">
               <option disabled selected value="">
                 Сортировать по:
               </option>
               <option value="up">Возрастанию</option>
               <option value="down">Убыванию</option>
             </select>
-            <button type="submit" class="btn btn-success ml-2">Сортировать</button>
+            <button type="submit" class="btn btn-success ml-2" style="margin: 0 10px 10px 0;">Сортировать</button>
 </form>
-        <form class="search d-flex flex-row align-items-center flex-wrap" action="{% url 'archive_filter' %}" method="get">
-            <select required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
+        <form class="search d-flex flex-row align-items-center flex-wrap" style="margin: 0 0 50px 0;" action="{% url 'archive_filter' %}" method="get">
+            <select required style="height: 38px; background-color: transparent; margin: 0 10px 10px 0; boreder-radius: 5px;" name="choice">
               <option disabled selected value="">
                 Фильтр/Поиск по:
               </option>
@@ -33,8 +33,8 @@
               <option value="user_fio">ФИО пользователя</option>
               <option value="number">Номеру документа</option>
             </select>
-            <input required name="q" style="height: 38px; border-radius: 5px; padding: 0 10px;">
-            <button type="submit" class="btn btn-success ml-2">Поиск</button>
+            <input required name="q" style="height: 38px; border-radius: 5px; margin: 0 10px 10px 0; padding: 0 10px;">
+            <button type="submit" class="btn btn-success ml-2" style="margin: 0 10px 10px 0;">Поиск</button>
         </form>
     </div>
     {% if error_message %}
