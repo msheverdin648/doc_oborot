@@ -13,6 +13,13 @@ class DocumentModel(models.Model):
     READ = 'read'
     SUBMITED = 'submited'
 
+    STATEMENT = 'statement'
+    REFERENCE = 'reference'
+    ORDER = 'order'
+    ACT = 'act'
+    CONTRACT = 'contract'
+    DECREE = 'decree'
+
     DOCUMENT_ACTION = [
         (READ, 'Ознакомление'),
         (SUBMITED, 'Подпись'),
@@ -26,10 +33,19 @@ class DocumentModel(models.Model):
         (SUBMITED, 'Подписан'),
         (EXECUTED, 'Исполнен')
     ]
+
+    DOCUMENT_TYPES = [
+        (STATEMENT, "Заявление"),
+        (REFERENCE, "Справка"),
+        (ORDER, "Поручение"),
+        (ACT, "Акт"),
+        (CONTRACT, "Договор"),
+        (DECREE, "Приказ")
+    ]
     name = models.CharField('Название документа', max_length=255, null=True)
     theme = models.CharField('Вид документа', max_length=255, null=True)
     number = models.IntegerField('Номер договора', null=True)
-    type = models.CharField('Тип документа', max_length=255, null=True)
+    type = models.CharField('Тип документа', max_length=255, null=True, choices=DOCUMENT_TYPES, default=CONTRACT)
     description = models.TextField('Краткое содержание документа', null=True)
     status = models.CharField('Статус документа', choices=DOCUMENT_STATUSES, max_length=255, default=ADDED)
     action = models.CharField('Отправить на..', choices=DOCUMENT_ACTION, max_length=255, default=READ)

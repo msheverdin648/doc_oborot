@@ -14,8 +14,10 @@ urlpatterns = [
     path('read/<int:pk>/', views.DocumentsRead.as_view(), name='read'),
     path('delete/<int:pk>/', views.DocumentsDelete.as_view(), name='delete'),
     path('filter/', views.DocumentsFilter.as_view(), name='filter'),
+    path('archive_filter/', views.ArchiveFilter.as_view(), name='archive_filter'),
     path('description/', views.DescriptionView.as_view(), name='description'),
     path('sort/', views.DocumentsSort.as_view(), name='sort'),
+    path('archive_sort/', views.ArchiveSort.as_view(), name='archive_sort'),
     path('report/', views.CreateReport.as_view(), name='report'),
 
 ]

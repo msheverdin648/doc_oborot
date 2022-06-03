@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Документооборот Стефашин Лев Николаевич</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
-<!--    <script src="{% static 'js/bootstrap.min.js' %}" ></script>-->
 </head>
     <body class="" style="height: 100%">
         <div class="wrapper d-flex flex-column " style="height: 100%">
@@ -17,11 +16,11 @@
                     <nav class="navbar navbar-expand-lg navbar-light">
                       <div class="container-fluid">
                         <a class="navbar-brand" >Документооборот</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                          <ul class="navbar-nav">
+                        <div  class="collapse navbar-collapse" id="navbarNav">
+                          <ul class="navbar-nav mr-auto">
                               {% url 'incoming' as incoming_url %}
                               {% if user.is_authenticated %}
                                   <li class="nav-item {% if incoming_url == request.path  %}active{% endif %}">
@@ -70,5 +69,7 @@
                 </p>
             </footer>
         </div>
+        <script src="{% static 'js/jquery.js' %}" ></script>
+        <script src="{% static 'js/bootstrap.min.js' %}" ></script>
     </body>
 </html>

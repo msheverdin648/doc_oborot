@@ -4,8 +4,8 @@
 {% block body %}
   <div class="container">
     <h1 class="mb-5 " style="text-align: center;">Архив</h1>
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <form class="search d-flex flex-row align-items-center" action="{% url 'sort' %}" method="get">
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
+        <form class="search d-flex flex-row align-items-center flex-wrap" action="{% url 'archive_sort' %}" method="get">
             <select value="" required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
               <option disabled selected value="">
                 Поле для сортировки:
@@ -24,7 +24,7 @@
             </select>
             <button type="submit" class="btn btn-success ml-2">Сортировать</button>
 </form>
-        <form class="search d-flex flex-row align-items-center" action="{% url 'filter' %}" method="get">
+        <form class="search d-flex flex-row align-items-center flex-wrap" action="{% url 'archive_filter' %}" method="get">
             <select required style="height: 38px; background-color: transparent; margin-right: 10px; boreder-radius: 5px;" name="choice">
               <option disabled selected value="">
                 Фильтр/Поиск по:
@@ -45,7 +45,7 @@
      </div>
     {% endif %}
 
-    <table class="table">
+    <table class="table-responsive">
         <thead>
             <tr>
               <th scope='col'>

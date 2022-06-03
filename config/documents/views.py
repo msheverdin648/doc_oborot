@@ -172,11 +172,18 @@ class DocumentsFilter(View):
         if not request.user.is_authenticated:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         choice = request.GET['choice']
+        error_message = False
         if choice == 'name':
             documents = DocumentModel.objects.filter(name__icontains=request.GET['q'])
         elif choice == 'number':
-            documents = DocumentModel.objects.filter(number__icontains=request.GET['q'])
+            try:
+                int(request.GET['q'])
+                documents = DocumentModel.objects.filter(number__icontains=request.GET['q'])
+            except ValueError:
+                documents = DocumentModel.objects.all()
+                error_message = 'Ошибка! Для поиска/фильтрации по номеру документа введите число.'
         elif choice == 'user_fio':
+
             first_name = request.GET['q'].split(' ')[0]
             try:
                 last_name = request.GET['q'].split(' ')[1]
@@ -191,7 +198,46 @@ class DocumentsFilter(View):
         context = {
             'documents': documents,
         }
+        if error_message:
+            context['error_message'] = error_message
         return render(request, 'documents/index.html', context)
+
+
+class ArchiveFilter(View):
+
+    def get(self, request, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        choice = request.GET['choice']
+        error_message = False
+        if choice == 'name':
+            documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True, name__icontains=request.GET['q'])
+        elif choice == 'number':
+            try:
+                int(request.GET['q'])
+                documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True, number__icontains=request.GET['q'])
+            except ValueError:
+                documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True)
+                error_message = 'Ошибка! Для поиска/фильтрации по номеру документа введите число.'
+        elif choice == 'user_fio':
+
+            first_name = request.GET['q'].split(' ')[0]
+            try:
+                last_name = request.GET['q'].split(' ')[1]
+                documents = (
+                    DocumentModel.objects
+                        .filter(user__first_name__icontains=first_name)
+                        .filter(user__last_name__icontains=last_name, user_from__pk=request.user.pk, archived=True)
+                )
+            except IndexError:
+                documents = DocumentModel.objects.filter(user__first_name__icontains=first_name, user_from__pk=request.user.pk, archived=True)
+
+        context = {
+            'documents': documents,
+        }
+        if error_message:
+            context['error_message'] = error_message
+        return render(request, 'documents/archive.html', context)
 
 
 class DocumentsSort(View):
@@ -211,6 +257,25 @@ class DocumentsSort(View):
             'documents': documents,
         }
         return render(request, 'documents/index.html', context)
+
+
+class ArchiveSort(View):
+
+    def get(self, request, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        choice = request.GET['choice']
+        up_down = request.GET['up_down']
+
+        if up_down == 'up':
+            documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True).order_by(f'{choice}')
+        elif up_down == 'down':
+            documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True).order_by(f'-{choice}')
+
+        context = {
+            'documents': documents,
+        }
+        return render(request, 'documents/archive.html', context)
 
 
 class DescriptionView(View):
@@ -255,7 +320,7 @@ class CreateReport(View):
             response = HttpResponse(content_type='text/csv')  # Определить HttpResponse, тип CSV
             response[
                 'Content-Disposition'] = f"attachment; filename = {date.strftime('%Y.%m.%d')}.csv"  # Определить возвращаемую информацию, метод вложения и имя файла;
-            writer = csv.writer(response)  # Используйте модуль csv для записи ответа
+            writer = csv.writer(response, dialect=csv.excel)  # Используйте модуль csv для записи ответа
             writer.writerow([
                 'Номер документа',
                 'Название документа',
@@ -269,4 +334,4 @@ class CreateReport(View):
             ])
             for row in data:
                 writer.writerow(row)  # Cycle для записи информации базы данных
-            return response
+        return response
