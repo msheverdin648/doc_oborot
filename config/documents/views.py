@@ -175,26 +175,32 @@ class DocumentsFilter(View):
         error_message = False
         if choice == 'name':
             documents = DocumentModel.objects.filter(name__icontains=request.GET['q'])
+            if not documents:
+                error_message = 'Документы не найдены'
         elif choice == 'number':
             try:
                 int(request.GET['q'])
                 documents = DocumentModel.objects.filter(number__icontains=request.GET['q'])
+                if not documents:
+                    error_message = 'Документы не найдены'
             except ValueError:
                 documents = DocumentModel.objects.all()
                 error_message = 'Ошибка! Для поиска/фильтрации по номеру документа введите число.'
         elif choice == 'user_fio':
-
             first_name = request.GET['q'].split(' ')[0]
             try:
                 last_name = request.GET['q'].split(' ')[1]
                 documents = (
                     DocumentModel.objects
-                        .filter(user__first_name__icontains=first_name)
-                        .filter(user__last_name__icontains=last_name)
+                        .filter(user_from__first_name__icontains=first_name)
+                        .filter(user_from__last_name__icontains=last_name)
                 )
+                if not documents:
+                    error_message = 'Документы не найдены'
             except IndexError:
-                documents = DocumentModel.objects.filter(user__first_name__icontains=first_name)
-
+                documents = DocumentModel.objects.filter(user_from__first_name__icontains=first_name)
+                if not documents:
+                    error_message = 'Документы не найдены'
         context = {
             'documents': documents,
         }
@@ -212,10 +218,14 @@ class ArchiveFilter(View):
         error_message = False
         if choice == 'name':
             documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True, name__icontains=request.GET['q'])
+            if not documents:
+                error_message = 'Документы не найдены'
         elif choice == 'number':
             try:
                 int(request.GET['q'])
                 documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True, number__icontains=request.GET['q'])
+                if not documents:
+                    error_message = 'Документы не найдены'
             except ValueError:
                 documents = DocumentModel.objects.filter(user_from__pk=request.user.pk, archived=True)
                 error_message = 'Ошибка! Для поиска/фильтрации по номеру документа введите число.'
@@ -226,12 +236,15 @@ class ArchiveFilter(View):
                 last_name = request.GET['q'].split(' ')[1]
                 documents = (
                     DocumentModel.objects
-                        .filter(user__first_name__icontains=first_name)
-                        .filter(user__last_name__icontains=last_name, user_from__pk=request.user.pk, archived=True)
+                        .filter(user_from__first_name__icontains=first_name)
+                        .filter(user_from__last_name__icontains=last_name, user_from__pk=request.user.pk, archived=True)
                 )
+                if not documents:
+                    error_message = 'Документы не найдены'
             except IndexError:
-                documents = DocumentModel.objects.filter(user__first_name__icontains=first_name, user_from__pk=request.user.pk, archived=True)
-
+                documents = DocumentModel.objects.filter(user_from__first_name__icontains=first_name, user_from__pk=request.user.pk, archived=True)
+                if not documents:
+                    error_message = 'Документы не найдены'
         context = {
             'documents': documents,
         }
